@@ -19,7 +19,7 @@ bool process_records(record_t *records, size_t num)
 	return true;
 }
 
-record_t* decompress_data(flashdata_t* data)
+records_t* decompress_data(flashdata_t* data)
 {
 	record_t *records = calloc(data->number_records, sizeof(record_t));
 	size_t offset = 0;
@@ -42,5 +42,8 @@ record_t* decompress_data(flashdata_t* data)
 		offset += rec_len;
 	}
 	process_records(records, data->number_records);
-	return records;
+	records_t *all_recs = calloc(1, sizeof(records_t));
+	all_recs->num_records = data->number_records;
+	all_recs->record = records;
+	return all_recs;
 }

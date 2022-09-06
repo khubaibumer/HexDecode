@@ -52,13 +52,25 @@ typedef struct record
 	uint8_t* data;
 } record_t;
 
-static void free_records(record_t** records)
+typedef struct records {
+	size_t num_records;
+	record_t *record;
+} records_t;
+
+static void free_records(records_t** records)
 {
 	if (*records)
 	{
-		if ((*records)->data)
+		if ((*records)->num_records > 0)
 		{
-			free((*records)->data);
+			for (int i = 0; i < (*records)->num_records; ++i)
+			{
+				if ((*records)->record[i].data)
+				{
+					free((*records)->record[i].data);
+				}
+			}
+			free((*records)->record);
 		}
 		free(*records);
 	}

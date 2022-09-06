@@ -8,7 +8,7 @@
 
 static int packet_count = 1;
 
-packet_t* read_packet(FILE* file, size_t* offset)
+packet_t* read_packet(FILE* file)
 {
 	// In our input file after every 2 characters there is a space
 	// We will try and read 5-bytes per read to accomodate 2char+1space+2char

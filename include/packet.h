@@ -14,6 +14,6 @@
     (tmp);\
 })
 
-packet_t * read_packet(FILE* file, size_t* offset);
+packet_t* read_packet(FILE* file);
 
 #endif //HEXTODATA_INCLUDE_PACKET_H

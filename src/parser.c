@@ -9,7 +9,7 @@
 
 #define FILENAME_ID 0x0002
 
-record_t* decompress_data(flashdata_t* data);
+records_t* decompress_data(flashdata_t* data);
 
 flashdata_t* prepare_payload(packet_t* pkt)
 {
@@ -61,9 +61,8 @@ bool decode(void* _this)
 {
 	packet_t* pkt = NULL;
 	flashdata_t *payload = NULL;
-	record_t *records = NULL;
-	size_t packet_count = 0;
-	while ((pkt = read_packet(GET_DATA(_this)->in, NULL)) != NULL)
+	records_t *records = NULL;
+	while ((pkt = read_packet(GET_DATA(_this)->in)) != NULL)
 	{
 		dump_packet(pkt, "PacketDump");
 		payload = prepare_payload(pkt);
@@ -73,7 +72,6 @@ bool decode(void* _this)
 			goto release_mem;
 		}
 		records = decompress_data(payload);
-		packet_count += payload->number_records;
 		GET_DECODER(_this)->print_file(records);
 
 	release_mem:
@@ -81,6 +79,5 @@ bool decode(void* _this)
 		free_records(&records);
 		free_flashdata(&payload);
 	}
-	printf("total objects: %ld\n", packet_count);
 	return true;
 }
