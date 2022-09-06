@@ -10,9 +10,18 @@ static int packet_count = 1;
 
 packet_t* read_packet(FILE* file)
 {
-	// In our input file after every 2 characters there is a space
-	// We will try and read 5-bytes per read to accomodate 2char+1space+2char
-	// fgets will only read 5 bytes of data to make space for null byte
+	/// * In our input file after every 2 characters there is a space <br>
+	/// * We will read one line at a time <br>
+	/// * If the line has 'BLK' we will skip this and the next line <br>
+	/// * If the line has 'COMP' we will mark the packet as complete <br>
+	/// <br> Input file is assumed to have the following format: - </br>
+	/**
+	 * BLK [block_num] <br>
+	 * 00000[block_num] <br>
+	 * { actual payload } <br>
+	 * empty line <br>
+	 * COMPLETE <br>
+	 * */
 	char line[64] = { 0 };
 	uint8_t packet[8096] = { 0 };
 	size_t count = 0;
