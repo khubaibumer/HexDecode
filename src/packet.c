@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include "packet.h"
 
-static int packet_count = 1;
-
 packet_t* read_packet(FILE* file)
 {
 	/// * In our input file after every 2 characters there is a space <br>
@@ -27,14 +25,13 @@ packet_t* read_packet(FILE* file)
 	size_t count = 0;
 	bool skip_next = false;
 	bool packet_complete = false;
-	static int packet_ln_cnt = 0;
+	size_t packet_count = 0;
 	while (fgets(&line[0], sizeof line, file) != NULL)
 	{
 		if (skip_next == true)
 		{
 			// If this is set, move to next line
 			skip_next = false;
-			packet_ln_cnt = 0;
 			continue;
 		}
 		else if (strstr(line, "BLK")) //BLK
@@ -48,7 +45,6 @@ packet_t* read_packet(FILE* file)
 			packet_complete = true;
 			break;
 		}
-		++packet_ln_cnt;
 
 		for (int i = 0; i < 64; i += 3)
 		{
@@ -59,9 +55,7 @@ packet_t* read_packet(FILE* file)
 			uint8_t byte = strtoul(&line[i], NULL, 16);
 			if (count >= sizeof packet)
 			{
-				fprintf(stderr, "count is %ld line is %s Num Packet: %d "
-								"Packet Line Count: %d\n",
-								count, line, packet_count, packet_ln_cnt);
+				fprintf(stderr, "count is %ld line is %s\n", count, line);
 				break;
 			}
 			packet[count++] = byte;
