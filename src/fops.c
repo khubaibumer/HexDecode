@@ -44,7 +44,7 @@ FILE* get_out_file(void* _this)
 
 const char* get_out_file_name(void* _this)
 {
-	return GET_OPTS(_this)->in_file;
+	return GET_OPTS(_this)->out_file;
 }
 
 

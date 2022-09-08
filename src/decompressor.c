@@ -197,24 +197,24 @@ bool process_records(void* _this, record_t* records, size_t num)
 		record_t* record = &records[i];
 		if (record->valid)
 		{
-			for (int j = 0; j < num; ++j)
+			for (int j = 0; j < record->len2; ++j)
 			{
 				if (skip_lo)
 				{
-					in_byte = (record->data[i] & 0xf0) >> 4;
+					in_byte = (record->data[j] & 0xf0) >> 4;
 					skip_lo = false;
 				}
 				else
 				{
-					in_byte = record->data[i];
+					in_byte = record->data[j];
 				}
 				uint8_t byte = decompress_nibble(in_byte);
 				switch (byte)
 				{
 				case g_literal_character:
 				{
-					uint8_t _1 = (record->data[i] & 0xf0);
-					uint8_t _2 = (record->data[i + 1] & 0x0f);
+					uint8_t _1 = (record->data[j] & 0xf0);
+					uint8_t _2 = (record->data[j + 1] & 0x0f);
 					uint8_t ch = (_1 | _2);
 					fprintf(GET_DECODER(_this)->get_out_file(_this), "%c", ch);
 					skip_lo = true;
@@ -252,7 +252,7 @@ bool process_records(void* _this, record_t* records, size_t num)
 					}
 					else
 					{
-						printf("ERROR: %d", byte);
+						// shouldn't come here
 					}
 					break;
 				}
