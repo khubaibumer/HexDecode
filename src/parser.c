@@ -9,7 +9,7 @@
 
 #define FILENAME_ID 0x0002
 
-records_t* decompress_data(flashdata_t* data);
+records_t* decompress_data(void* _this, flashdata_t* data);
 
 flashdata_t* prepare_payload(packet_t* pkt)
 {
@@ -71,7 +71,7 @@ bool decode(void* _this)
 			fprintf(stderr, "Failure preparing Payload. Packet#%ld\n", pkt->packet_number);
 			goto release_mem;
 		}
-		records = decompress_data(payload);
+		records = decompress_data(_this, payload);
 		GET_DECODER(_this)->print_file(records);
 
 	release_mem:
